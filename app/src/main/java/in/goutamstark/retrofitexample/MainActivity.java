@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         //getCommentsByUrl();
         //CreatePost();
         //CreatePostByUrlEncode();
-        CreatePostByUrlEncodeByFieldMap();
+        //CreatePostByUrlEncodeByFieldMap();
+        UpdatePost();
     }
 
 
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 Post2 postResponse = response.body();
                 String data = "";
 
-                data += "Code: "+response.code()+"\n";
+                data += "Code: " + response.code() + "\n";
                 data += "UserID: " + postResponse.getUserId() + "\n";
                 data += "Title: " + postResponse.getTitle() + "\n";
                 data += "Text: " + postResponse.getText() + "\n\n";
@@ -283,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 Post2 postResponse = response.body();
                 String data = "";
 
-                data += "Code: "+response.code()+"\n";
+                data += "Code: " + response.code() + "\n";
                 data += "UserID: " + postResponse.getUserId() + "\n";
                 data += "Title: " + postResponse.getTitle() + "\n";
                 data += "Text: " + postResponse.getText() + "\n\n";
@@ -302,8 +303,8 @@ public class MainActivity extends AppCompatActivity {
     private void CreatePostByUrlEncodeByFieldMap() {
         Map<String, String> map = new HashMap<>();
         map.put("userId", "25");
-        map.put("title","New Title");
-        map.put("body","New Text");
+        map.put("title", "New Title");
+        map.put("body", "New Text");
         Call<Post2> call = jsonPlaceHolderApi.createPost(map);
         call.enqueue(new Callback<Post2>() {
             @Override
@@ -315,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 Post2 postResponse = response.body();
                 String data = "";
 
-                data += "Code: "+response.code()+"\n";
+                data += "Code: " + response.code() + "\n";
                 data += "UserID: " + postResponse.getUserId() + "\n";
                 data += "Title: " + postResponse.getTitle() + "\n";
                 data += "Text: " + postResponse.getText() + "\n\n";
@@ -330,5 +331,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void UpdatePost() {
+        Post2 post2 = new Post2(12, null, "New Text");
+
+        //PUT
+        //Call<Post2> post2Call = jsonPlaceHolderApi.putPost(5, post2);
+
+        //PATCH- only not null value will be replaced means updated
+        Call<Post2> post2Call = jsonPlaceHolderApi.patchPost(5, post2);
+
+        post2Call.enqueue(new Callback<Post2>() {
+            @Override
+            public void onResponse(Call<Post2> call, Response<Post2> response) {
+                if (!response.isSuccessful()) {
+                    textViewResult.setText("Code: " + response.code());
+                    return;
+                }
+                Post2 postResponse = response.body();
+                String data = "";
+
+                data += "Code: " + response.code() + "\n";
+                data += "UserID: " + postResponse.getUserId() + "\n";
+                data += "Title: " + postResponse.getTitle() + "\n";
+                data += "Text: " + postResponse.getText() + "\n\n";
+
+
+                textViewResult.setText(data);
+            }
+
+            @Override
+            public void onFailure(Call<Post2> call, Throwable t) {
+                textViewResult.setText(t.getMessage());
+            }
+        });
+    }
+
+
+    // Not completed
+    private void createHeaderPost() {
+        Post2 post2 = new Post2(12, null, "New Text");
+
+        Call<Post2> post2Call = jsonPlaceHolderApi.createHeaderPost("abc",5, post2);
+
+        post2Call.enqueue(new Callback<Post2>() {
+            @Override
+            public void onResponse(Call<Post2> call, Response<Post2> response) {
+                if (!response.isSuccessful()) {
+                    textViewResult.setText("Code: " + response.code());
+                    return;
+                }
+                Post2 postResponse = response.body();
+                String data = "";
+
+                data += "Code: " + response.code() + "\n";
+                data += "UserID: " + postResponse.getUserId() + "\n";
+                data += "Title: " + postResponse.getTitle() + "\n";
+                data += "Text: " + postResponse.getText() + "\n\n";
+
+
+                textViewResult.setText(data);
+            }
+
+            @Override
+            public void onFailure(Call<Post2> call, Throwable t) {
+                textViewResult.setText(t.getMessage());
+            }
+        });
+    }
+
 
 }
